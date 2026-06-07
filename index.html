@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0E0606">
 <title>Craftio — AI plánovač a správce receptů</title>
-<meta name="description" content="AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej. Stáhni si Craftio zdarma na Google Play.">
-
+<meta name="description" content="AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej. Stáhni si Craftio zdarma na App Store i Google Play.">
 <!-- Open Graph -->
 <meta property="og:title" content="Craftio">
 <meta property="og:description" content="AI plánovač a správce receptů">
@@ -17,18 +16,14 @@
 <meta name="twitter:title" content="Craftio">
 <meta name="twitter:description" content="AI plánovač a správce receptů">
 <meta name="twitter:image" content="https://getcraftio.com/logo.png">
-
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
-
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <!-- Tabler Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.36.0/dist/tabler-icons.min.css">
-
 <style>
 :root {
   --bg: #0E0606;
@@ -40,11 +35,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
 html { -webkit-text-size-adjust: 100%; }
-
 body {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
@@ -61,7 +53,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 /* atmospheric vignette */
 body::before {
   content: '';
@@ -73,7 +64,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-
 .lang-switch {
   position: absolute;
   top: 20px;
@@ -88,7 +78,6 @@ body::before {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-
 .lang-btn {
   background: transparent;
   border: none;
@@ -103,16 +92,13 @@ body::before {
   letter-spacing: 0.5px;
   line-height: 1;
 }
-
 .lang-btn:hover {
   color: var(--text);
 }
-
 .lang-btn.active {
   background: var(--accent);
   color: #FFFFFF;
 }
-
 .container {
   width: 100%;
   max-width: 420px;
@@ -124,7 +110,6 @@ body::before {
   padding-top: 72px;
   flex: 1;
 }
-
 .logo {
   width: 132px;
   height: 132px;
@@ -134,14 +119,12 @@ body::before {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   animation: fadeUp 0.5s ease-out both;
 }
-
 .logo img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
 }
-
 .tagline {
   font-size: 15px;
   font-weight: 500;
@@ -152,7 +135,6 @@ body::before {
   line-height: 1.4;
   animation: fadeUp 0.5s ease-out 0.08s both;
 }
-
 .buttons {
   display: flex;
   flex-direction: column;
@@ -160,7 +142,6 @@ body::before {
   gap: 9px;
   animation: fadeUp 0.5s ease-out 0.16s both;
 }
-
 .btn {
   display: flex;
   align-items: center;
@@ -181,41 +162,42 @@ body::before {
   letter-spacing: -0.1px;
   line-height: 1;
 }
-
 .btn i {
   font-size: 19px;
   line-height: 1;
 }
-
 .btn-primary {
   background: var(--accent);
   color: #FFFFFF;
   border-color: var(--accent);
 }
-
 .btn-primary:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
   transform: translateY(-1px);
 }
-
 .btn-primary:active {
   transform: translateY(0);
 }
-
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.22);
   transform: translateY(-1px);
 }
-
+.btn-secondary:active {
+  transform: translateY(0);
+}
 .btn-disabled {
   background: rgba(255, 255, 255, 0.03);
   color: #6B5C5C;
   border-color: transparent;
   cursor: not-allowed;
 }
-
 .divider {
   width: 36px;
   height: 0.5px;
@@ -223,7 +205,6 @@ body::before {
   margin: 26px 0 10px;
   animation: fadeUp 0.5s ease-out 0.24s both;
 }
-
 .sub-links {
   display: flex;
   flex-direction: column;
@@ -231,7 +212,6 @@ body::before {
   gap: 2px;
   animation: fadeUp 0.5s ease-out 0.32s both;
 }
-
 .sub-link {
   display: flex;
   align-items: center;
@@ -245,16 +225,13 @@ body::before {
   border-radius: 10px;
   transition: color 0.15s ease;
 }
-
 .sub-link:hover {
   color: var(--text);
 }
-
 .sub-link i {
   font-size: 16px;
   line-height: 1;
 }
-
 .footer {
   margin-top: auto;
   padding-top: 40px;
@@ -264,78 +241,64 @@ body::before {
   letter-spacing: 0.4px;
   animation: fadeUp 0.5s ease-out 0.4s both;
 }
-
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 /* language visibility */
 [data-lang="cs"] [data-i18n="en"],
 [data-lang="en"] [data-i18n="cs"] {
   display: none;
 }
-
 @media (max-width: 360px) {
   .logo { width: 116px; height: 116px; border-radius: 24px; }
   .tagline { font-size: 14px; }
   .container { padding-top: 64px; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
 </head>
 <body>
-
 <div class="lang-switch" role="group" aria-label="Language switcher">
   <button class="lang-btn" data-set-lang="cs" aria-label="Čeština">CS</button>
   <button class="lang-btn" data-set-lang="en" aria-label="English">EN</button>
 </div>
-
 <main class="container">
   <div class="logo">
     <img src="logo.png" alt="Craftio" width="132" height="132">
   </div>
-
   <p class="tagline">
     <span data-i18n="cs">AI plánovač a správce receptů</span>
     <span data-i18n="en">AI recipe manager for food lovers</span>
   </p>
-
   <div class="buttons">
-    <a href="https://play.google.com/store/apps/details?id=cz.craftio.app" class="btn btn-primary" rel="noopener">
+    <a href="https://apps.apple.com/cz/app/craftio/id6764860051" class="btn btn-primary" rel="noopener">
+      <i class="ti ti-brand-apple" aria-hidden="true"></i>
+      <span data-i18n="cs">Stáhnout na App Store</span>
+      <span data-i18n="en">Download on the App Store</span>
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=cz.craftio.app" class="btn btn-secondary" rel="noopener">
       <i class="ti ti-brand-google-play" aria-hidden="true"></i>
       <span data-i18n="cs">Stáhnout na Google Play</span>
       <span data-i18n="en">Get it on Google Play</span>
     </a>
-
-    <div class="btn btn-disabled" aria-disabled="true">
-      <i class="ti ti-brand-apple" aria-hidden="true"></i>
-      <span data-i18n="cs">App Store · brzy</span>
-      <span data-i18n="en">App Store · coming soon</span>
-    </div>
   </div>
-
   <div class="divider" aria-hidden="true"></div>
-
   <div class="sub-links">
     <a href="https://craftioapp-official.github.io/craftio-privacy/" class="sub-link" rel="noopener">
       <i class="ti ti-shield-check" aria-hidden="true"></i>
       <span data-i18n="cs">Zásady ochrany údajů</span>
       <span data-i18n="en">Privacy policy</span>
     </a>
-
     <a href="mailto:info@getcraftio.com" class="sub-link">
       <i class="ti ti-mail" aria-hidden="true"></i>
       <span>info@getcraftio.com</span>
     </a>
   </div>
-
   <div class="footer">© 2026 Craftio</div>
 </main>
-
 <script>
 (function() {
   var root = document.documentElement;
@@ -345,10 +308,9 @@ body::before {
     en: 'Craftio — AI recipe manager for food lovers'
   };
   var descriptions = {
-    cs: 'AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej.',
-    en: 'AI recipe manager for food lovers. Scan, plan, cook, share.'
+    cs: 'AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej. Stáhni si Craftio zdarma na App Store i Google Play.',
+    en: 'AI recipe manager for food lovers. Scan, plan, cook, share. Download Craftio free on the App Store and Google Play.'
   };
-
   function setLang(lang) {
     if (lang !== 'cs' && lang !== 'en') lang = 'cs';
     root.setAttribute('data-lang', lang);
@@ -363,7 +325,6 @@ body::before {
     });
     try { localStorage.setItem('craftio_lang', lang); } catch (e) {}
   }
-
   // determine initial language: saved > browser > default cs
   var initial = 'cs';
   try {
@@ -378,9 +339,7 @@ body::before {
     var nav2 = (navigator.language || 'cs').toLowerCase();
     initial = (nav2.indexOf('cs') === 0 || nav2.indexOf('sk') === 0) ? 'cs' : 'en';
   }
-
   setLang(initial);
-
   buttons.forEach(function(b) {
     b.addEventListener('click', function() {
       setLang(b.getAttribute('data-set-lang'));
@@ -388,6 +347,5 @@ body::before {
   });
 })();
 </script>
-
 </body>
 </html>
