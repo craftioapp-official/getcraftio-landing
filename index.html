@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="cs" data-lang="cs">
+<html lang="cs" data-lang="cs" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0E0606">
+<meta name="theme-color" content="#180D0C">
 <title>Craftio — AI plánovač a správce receptů</title>
-<meta name="description" content="AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej. Stáhni si Craftio zdarma na App Store i Google Play.">
+<meta name="description" content="Recepty, porce, náklady i sdílení na jednom místě. Stáhni si Craftio zdarma na App Store i Google Play. 🇨🇿 🇸🇰">
 <!-- Open Graph -->
 <meta property="og:title" content="Craftio">
-<meta property="og:description" content="AI plánovač a správce receptů">
+<meta property="og:description" content="AI plánovač a správce receptů — recepty, porce, náklady i sdílení na jednom místě.">
 <meta property="og:image" content="https://getcraftio.com/logo.png">
 <meta property="og:url" content="https://getcraftio.com">
 <meta property="og:type" content="website">
@@ -18,298 +18,736 @@
 <meta name="twitter:image" content="https://getcraftio.com/logo.png">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
-<!-- Fonts -->
+<!-- Fonts: Poppins (headings/body) + Anton (hero accent) — latin-ext covers CZ/SK diacritics -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- Tabler Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.36.0/dist/tabler-icons.min.css">
 <style>
 :root {
-  --bg: #0E0606;
-  --text: #FFFFFF;
-  --text-muted: #A09494;
-  --text-faint: #5A4F4F;
-  --accent: #E14747;
-  --accent-hover: #ED5555;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  /* Brand palette */
+  --cream: #F3EDE4;        /* light sections */
+  --dark: #180D0C;         /* warm dark-black — hero + contrast blocks */
+  --coral: #E75A5A;        /* brand accent — CTA, payoff on dark */
+  --coral-hover: #F06A6A;
+  --coral-deep: #C24238;   /* deeper coral for readable text on cream */
+  --ink: #110A07;          /* text on cream */
+
+  /* Derived text colors */
+  --on-dark: #FFFFFF;
+  --on-dark-muted: rgba(243, 237, 228, 0.66);
+  --on-cream: var(--ink);
+  --on-cream-muted: rgba(17, 10, 7, 0.66);
+
+  --border-dark: rgba(243, 237, 228, 0.14);
+  --border-cream: rgba(17, 10, 7, 0.12);
+
+  --maxw: 1080px;
+  --radius: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 20px 32px;
-  position: relative;
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--dark);
+  color: var(--on-dark);
+  line-height: 1.5;
   overflow-x: hidden;
-  font-feature-settings: "ss01" on, "cv11" on;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* atmospheric vignette */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(225, 71, 71, 0.10), transparent 70%),
-    radial-gradient(ellipse 60% 50% at 50% 110%, rgba(225, 71, 71, 0.04), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+
+img { max-width: 100%; display: block; }
+
+/* ---------- Focus (keyboard navigation) ---------- */
+:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
-.lang-switch {
+.section--cream :focus-visible { outline-color: var(--coral-deep); }
+
+/* Skip link */
+.skip-link {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  left: 12px; top: -60px;
+  background: var(--coral);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 100;
+  transition: top 0.2s var(--ease);
+}
+.skip-link:focus { top: 12px; }
+
+/* ---------- Layout ---------- */
+.section { position: relative; padding: 84px 20px; }
+.section--dark { background: var(--dark); color: var(--on-dark); }
+.section--cream { background: var(--cream); color: var(--on-cream); }
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--on-dark); }
+.brand img { width: 34px; height: 34px; border-radius: 9px; }
+.brand span { font-weight: 700; font-size: 17px; letter-spacing: -0.2px; }
+
+.lang-switch {
   display: flex;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 0.5px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid var(--border-dark);
   border-radius: 100px;
   padding: 3px;
-  z-index: 10;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 .lang-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
-  letter-spacing: 0.5px;
-  line-height: 1;
+  background: transparent; border: none;
+  color: var(--on-dark-muted);
+  font-family: inherit; font-size: 11px; font-weight: 600;
+  padding: 6px 12px; border-radius: 100px; cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  letter-spacing: 0.5px; line-height: 1;
 }
-.lang-btn:hover {
-  color: var(--text);
+.lang-btn:hover { color: var(--on-dark); }
+.lang-btn.active { background: var(--coral); color: #fff; }
+
+/* ---------- Hero ---------- */
+.hero { padding-top: 108px; padding-bottom: 72px; overflow: hidden; }
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -8%, rgba(231, 90, 90, 0.16), transparent 68%),
+    radial-gradient(ellipse 55% 45% at 90% 40%, rgba(231, 90, 90, 0.06), transparent 70%);
+  pointer-events: none;
 }
-.lang-btn.active {
-  background: var(--accent);
-  color: #FFFFFF;
-}
-.container {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.hero .wrap {
   position: relative;
-  z-index: 1;
-  padding-top: 72px;
-  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 44px;
+  align-items: center;
 }
-.logo {
-  width: 132px;
-  height: 132px;
-  margin-bottom: 22px;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  animation: fadeUp 0.5s ease-out both;
+.hero__copy { text-align: center; }
+.hero h1 {
+  font-weight: 700;
+  font-size: clamp(28px, 7vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -0.5px;
 }
-.logo img {
-  width: 100%;
-  height: 100%;
+.hero .payoff {
   display: block;
-  object-fit: cover;
+  font-family: 'Anton', 'Poppins', sans-serif;
+  font-weight: 400;
+  color: var(--coral);
+  font-size: clamp(52px, 15vw, 104px);
+  line-height: 0.92;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  text-transform: uppercase;
 }
-.tagline {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 30px;
-  letter-spacing: -0.1px;
-  line-height: 1.4;
-  animation: fadeUp 0.5s ease-out 0.08s both;
+.hero .lead {
+  font-size: clamp(15px, 2.4vw, 18px);
+  color: var(--on-dark-muted);
+  max-width: 30ch;
+  margin: 22px auto 0;
+  font-weight: 400;
 }
-.buttons {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 9px;
-  animation: fadeUp 0.5s ease-out 0.16s both;
-}
+
+/* ---------- Buttons ---------- */
+.cta-group { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
 .btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 22px; border-radius: 14px;
+  font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -0.1px;
+  text-decoration: none; line-height: 1; cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: transform 0.15s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.btn i { font-size: 20px; line-height: 1; }
+.btn-primary { background: var(--coral); color: #fff; border-color: var(--coral); }
+.btn-primary:hover { background: var(--coral-hover); border-color: var(--coral-hover); transform: translateY(-2px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-outline { background: transparent; color: var(--on-dark); border-color: var(--border-dark); }
+.btn-outline:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.28); transform: translateY(-2px); }
+.section--cream .btn-outline { color: var(--ink); border-color: rgba(17, 10, 7, 0.22); }
+.section--cream .btn-outline:hover { background: rgba(17, 10, 7, 0.05); border-color: rgba(17, 10, 7, 0.38); }
+
+.microcopy {
+  margin-top: 16px; font-size: 13px; font-weight: 500;
+  color: var(--on-dark-muted); letter-spacing: 0.2px;
+}
+.section--cream .microcopy { color: var(--on-cream-muted); }
+
+/* ---------- Phone mockup (signature element) ---------- */
+.phone {
+  position: relative;
   width: 100%;
-  padding: 15px 20px;
-  border-radius: 14px;
-  font-family: inherit;
-  font-size: 15px;
+  max-width: 288px;
+  margin: 0 auto;
+  padding: 9px;
+  background: linear-gradient(160deg, #2a1917, #16100e);
+  border-radius: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.4),
+    0 30px 60px -18px rgba(0, 0, 0, 0.65),
+    0 18px 46px -14px rgba(231, 90, 90, 0.18),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 3px rgba(0, 0, 0, 0.6);
+}
+.section--cream .phone {
+  box-shadow:
+    0 2px 3px rgba(17, 10, 7, 0.15),
+    0 30px 60px -18px rgba(17, 10, 7, 0.35),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 3px rgba(0, 0, 0, 0.6);
+}
+.phone__screen {
+  position: relative;
+  border-radius: 36px;
+  overflow: hidden;
+  background: #121212;
+}
+.phone__bar { position: relative; height: 26px; background: #121212; }
+.phone__notch {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 36%; height: 19px; background: #0b0807;
+  border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
+}
+.phone__screen img { width: 100%; }
+.phone--float { transform: rotate(0deg); }
+
+/* ---------- Feature sections ---------- */
+.feature .wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.feature__text { text-align: center; }
+.kicker {
+  display: inline-block;
+  font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--coral); margin-bottom: 14px;
+}
+.section--cream .kicker { color: var(--coral-deep); }
+.feature__q {
   font-weight: 600;
-  text-decoration: none;
-  border: 0.5px solid var(--border-strong);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-  letter-spacing: -0.1px;
-  line-height: 1;
+  font-size: clamp(21px, 4.6vw, 28px);
+  line-height: 1.2; letter-spacing: -0.3px;
 }
-.btn i {
-  font-size: 19px;
-  line-height: 1;
+.feature__a {
+  display: block;
+  font-weight: 700;
+  color: var(--coral);
+  font-size: clamp(24px, 5.4vw, 34px);
+  line-height: 1.15; letter-spacing: -0.4px;
+  margin-top: 4px;
 }
-.btn-primary {
-  background: var(--accent);
-  color: #FFFFFF;
-  border-color: var(--accent);
+.section--cream .feature__a { color: var(--coral-deep); }
+.feature__desc {
+  margin: 18px auto 0;
+  max-width: 40ch;
+  font-size: clamp(15px, 2.3vw, 17px);
+  color: var(--on-dark-muted);
+  font-weight: 400;
 }
-.btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  transform: translateY(-1px);
+.section--cream .feature__desc { color: var(--on-cream-muted); }
+
+/* Share card (feature 3) — presented as a shared card, not a phone */
+.share-card {
+  width: 100%; max-width: 340px; margin: 0 auto;
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 26px 50px -18px rgba(17, 10, 7, 0.4), 0 2px 3px rgba(17, 10, 7, 0.15);
+  transform: rotate(-2deg);
 }
-.btn-primary:active {
-  transform: translateY(0);
+.share-card img { width: 100%; }
+
+/* ---------- Capabilities strip ---------- */
+.more { text-align: center; }
+.more__label {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.4px;
+  color: var(--on-dark-muted); margin-bottom: 20px;
 }
-.btn-secondary {
-  background: transparent;
-  color: var(--text);
-  border-color: var(--border-strong);
-}
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.22);
-  transform: translateY(-1px);
-}
-.btn-secondary:active {
-  transform: translateY(0);
-}
-.btn-disabled {
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 16px; border-radius: 100px;
+  border: 1px solid var(--border-dark);
   background: rgba(255, 255, 255, 0.03);
-  color: #6B5C5C;
-  border-color: transparent;
-  cursor: not-allowed;
+  font-size: 14px; font-weight: 500; color: var(--on-dark);
 }
-.divider {
-  width: 36px;
-  height: 0.5px;
-  background: var(--border-strong);
-  margin: 26px 0 10px;
-  animation: fadeUp 0.5s ease-out 0.24s both;
+.chip i { font-size: 17px; color: var(--coral); }
+.section--cream .chip {
+  border-color: var(--border-cream);
+  background: rgba(17, 10, 7, 0.03);
+  color: var(--ink);
 }
-.sub-links {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 2px;
-  animation: fadeUp 0.5s ease-out 0.32s both;
+.section--cream .chip i { color: var(--coral-deep); }
+
+/* ---------- Audience row ---------- */
+.audience { text-align: center; }
+.audience .kicker { display: block; }
+.audience h2 {
+  font-weight: 700; font-size: clamp(22px, 4.6vw, 30px);
+  letter-spacing: -0.4px; margin-bottom: 30px;
 }
-.sub-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px;
-  color: var(--text-muted);
-  font-size: 13.5px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 10px;
-  transition: color 0.15s ease;
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 12px 18px; border-radius: 14px;
+  border: 1px solid var(--border-cream);
+  background: rgba(17, 10, 7, 0.03);
+  font-size: 15px; font-weight: 600; color: var(--ink);
 }
-.sub-link:hover {
-  color: var(--text);
+.tag i { font-size: 19px; color: var(--coral-deep); }
+.section--dark .tag {
+  border-color: var(--border-dark);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--on-dark);
 }
-.sub-link i {
-  font-size: 16px;
-  line-height: 1;
+.section--dark .tag i { color: var(--coral); }
+
+/* ---------- Final CTA ---------- */
+.final { text-align: center; overflow: hidden; }
+.final::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(231, 90, 90, 0.14), transparent 68%);
+  pointer-events: none;
 }
+.final .wrap { position: relative; }
+.final__q { font-weight: 600; font-size: clamp(20px, 4.4vw, 27px); line-height: 1.25; }
+.final__a {
+  display: block;
+  font-family: 'Anton', 'Poppins', sans-serif; font-weight: 400;
+  color: var(--coral); text-transform: uppercase;
+  font-size: clamp(40px, 11vw, 76px); line-height: 0.95; letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+.final .cta-group { max-width: 340px; margin-left: auto; margin-right: auto; }
+
+/* ---------- Footer ---------- */
 .footer {
-  margin-top: auto;
-  padding-top: 40px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-faint);
-  letter-spacing: 0.4px;
-  animation: fadeUp 0.5s ease-out 0.4s both;
+  background: var(--dark); color: var(--on-dark);
+  padding: 40px 20px 44px;
+  border-top: 1px solid var(--border-dark);
+  text-align: center;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+.footer__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin-bottom: 20px; }
+.footer__links a {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--on-dark-muted); text-decoration: none;
+  font-size: 14px; font-weight: 500;
+  padding: 6px 4px; border-radius: 8px;
+  transition: color 0.15s var(--ease);
 }
-/* language visibility */
+.footer__links a:hover { color: var(--on-dark); }
+.footer__links i { font-size: 17px; }
+.footer__copy { font-size: 12px; font-weight: 500; color: rgba(243, 237, 228, 0.4); letter-spacing: 0.4px; }
+
+/* ---------- Language visibility ---------- */
 [data-lang="cs"] [data-i18n="en"],
-[data-lang="en"] [data-i18n="cs"] {
-  display: none;
+[data-lang="en"] [data-i18n="cs"] { display: none; }
+
+/* ---------- Reveal on scroll ---------- */
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.js .reveal.in { opacity: 1; transform: none; }
+.js .reveal.d1 { transition-delay: 0.08s; }
+.js .reveal.d2 { transition-delay: 0.16s; }
+
+/* ---------- Desktop ---------- */
+@media (min-width: 760px) {
+  .section { padding: 110px 40px; }
+  .hero { padding-top: 130px; }
+  .hero .wrap { grid-template-columns: 1.05fr 0.95fr; gap: 56px; text-align: left; }
+  .hero__copy { text-align: left; }
+  .hero .lead { margin-left: 0; }
+  .cta-group { flex-direction: row; flex-wrap: wrap; }
+  .cta-group .btn { flex: 0 1 auto; }
+  .phone { max-width: 320px; }
+
+  .feature .wrap { grid-template-columns: 1fr 1fr; gap: 64px; }
+  .feature__text { text-align: left; }
+  .feature__desc { margin-left: 0; }
+  .feature--reverse .feature__media { order: -1; }
+
+  .final .cta-group { flex-direction: row; justify-content: center; max-width: none; }
 }
-@media (max-width: 360px) {
-  .logo { width: 116px; height: 116px; border-radius: 24px; }
-  .tagline { font-size: 14px; }
-  .container { padding-top: 64px; }
+
+@media (min-width: 1000px) {
+  .hero .payoff { font-size: 108px; }
 }
+
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  .share-card, .phone--float { transform: none !important; }
 }
 </style>
 </head>
 <body>
-<div class="lang-switch" role="group" aria-label="Language switcher">
-  <button class="lang-btn" data-set-lang="cs" aria-label="Čeština">CS</button>
-  <button class="lang-btn" data-set-lang="en" aria-label="English">EN</button>
+<a class="skip-link" href="#hlavni">
+  <span data-i18n="cs">Přeskočit na obsah</span><span data-i18n="en">Skip to content</span>
+</a>
+
+<!-- Top bar -->
+<div class="topbar">
+  <a class="brand" href="#hlavni" aria-label="Craftio">
+    <img src="logo.png" alt="" width="34" height="34">
+    <span>Craftio</span>
+  </a>
+  <div class="lang-switch" role="group" aria-label="Language switcher">
+    <button class="lang-btn" data-set-lang="cs" aria-label="Čeština">CS</button>
+    <button class="lang-btn" data-set-lang="en" aria-label="English">EN</button>
+  </div>
 </div>
-<main class="container">
-  <div class="logo">
-    <img src="logo.png" alt="Craftio" width="132" height="132">
-  </div>
-  <p class="tagline">
-    <span data-i18n="cs">AI plánovač a správce receptů</span>
-    <span data-i18n="en">AI recipe manager for food lovers</span>
-  </p>
-  <div class="buttons">
-    <a href="https://apps.apple.com/cz/app/craftio/id6764860051" class="btn btn-primary" rel="noopener">
-      <i class="ti ti-brand-apple" aria-hidden="true"></i>
-      <span data-i18n="cs">Stáhnout na App Store</span>
-      <span data-i18n="en">Download on the App Store</span>
-    </a>
-    <a href="https://play.google.com/store/apps/details?id=cz.craftio.app" class="btn btn-secondary" rel="noopener">
-      <i class="ti ti-brand-google-play" aria-hidden="true"></i>
-      <span data-i18n="cs">Stáhnout na Google Play</span>
-      <span data-i18n="en">Get it on Google Play</span>
-    </a>
-  </div>
-  <div class="divider" aria-hidden="true"></div>
-  <div class="sub-links">
-    <a href="https://craftioapp-official.github.io/craftio-privacy/" class="sub-link" rel="noopener">
-      <i class="ti ti-shield-check" aria-hidden="true"></i>
-      <span data-i18n="cs">Zásady ochrany údajů</span>
-      <span data-i18n="en">Privacy policy</span>
-    </a>
-    <a href="mailto:info@getcraftio.com" class="sub-link">
-      <i class="ti ti-mail" aria-hidden="true"></i>
-      <span>info@getcraftio.com</span>
-    </a>
-  </div>
-  <div class="footer">© 2026 Craftio</div>
+
+<main id="hlavni">
+
+  <!-- HERO -->
+  <section class="section section--dark hero">
+    <div class="wrap">
+      <div class="hero__copy">
+        <h1 class="reveal">
+          <span data-i18n="cs">Plánuješ recepty, ale seznam píšeš zvlášť?</span>
+          <span data-i18n="en">Planning recipes, but writing the list separately?</span>
+          <span class="payoff" aria-hidden="false">
+            <span data-i18n="cs">Nemusíš.</span><span data-i18n="en">Not anymore.</span>
+          </span>
+        </h1>
+        <p class="lead reveal d1">
+          <span data-i18n="cs">Naplánuješ recept na den pečení a Craftio z něj samo udělá nákupní seznam.</span>
+          <span data-i18n="en">Plan a recipe for your baking day and Craftio turns it into a shopping list on its own.</span>
+        </p>
+        <div class="cta-group reveal d2">
+          <a href="https://apps.apple.com/cz/app/craftio/id6764860051" class="btn btn-primary" rel="noopener">
+            <i class="ti ti-brand-apple" aria-hidden="true"></i>
+            <span data-i18n="cs">Stáhnout na App Store</span>
+            <span data-i18n="en">Download on the App Store</span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=cz.craftio.app" class="btn btn-outline" rel="noopener">
+            <i class="ti ti-brand-google-play" aria-hidden="true"></i>
+            <span data-i18n="cs">Stáhnout na Google Play</span>
+            <span data-i18n="en">Get it on Google Play</span>
+          </a>
+        </div>
+        <p class="microcopy reveal d2">
+          <span data-i18n="cs">Zdarma · iOS i Android · 🇨🇿 🇸🇰</span>
+          <span data-i18n="en">Free · iOS &amp; Android · 🇨🇿 🇸🇰</span>
+        </p>
+      </div>
+      <div class="hero__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/hero-calendar.jpg" alt="Plánovač pečení v aplikaci Craftio – naplánovaná Focaccia na sobotu 8. 8." width="760" height="1058" loading="eager">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 1 — shopping list from recipe (cream) -->
+  <section class="section section--cream feature">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Nákupní seznam</span><span data-i18n="en">Shopping list</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Naplánuješ recept.</span>
+          <span data-i18n="en">You plan a recipe.</span>
+          <span class="feature__a">
+            <span data-i18n="cs">Seznam se udělá sám.</span>
+            <span data-i18n="en">The list makes itself.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Craftio spočítá suroviny přesně pro naplánovaný den a poskládá je do jednoho seznamu — i napříč více recepty.</span>
+          <span data-i18n="en">Craftio works out the ingredients for your planned day and puts them into one list — even across several recipes.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/shopping-list.jpg" alt="Nákupní seznam vygenerovaný z naplánovaného receptu v aplikaci Craftio" width="760" height="1077" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 2 — recipe import (dark) -->
+  <section class="section section--dark feature feature--reverse">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Import receptu</span><span data-i18n="en">Recipe import</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Recept z fotky, webu, nebo jen textu?</span>
+          <span data-i18n="en">A recipe from a photo, the web, or just text?</span>
+          <span class="feature__a">
+            <span data-i18n="cs">Naimportuješ ho za pár vteřin.</span>
+            <span data-i18n="en">Import it in seconds.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Vyfoť stránku z kuchařky a appka text přečte sama (OCR). Nebo vlož odkaz na recept, zkopírovaný text, případně ho napiš ručně od začátku.</span>
+          <span data-i18n="en">Snap a photo of a cookbook page and the app reads the text for you (OCR). Or paste a link, paste copied text, or just type it in from scratch.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/import.jpg" alt="Možnosti importu receptu v aplikaci Craftio – ruční zadání, foto kuchařky (OCR), import z URL, vložený text" width="760" height="1560" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 3 — recipe in one place (cream) -->
+  <section class="section section--cream feature">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Tvoje recepty</span><span data-i18n="en">Your recipes</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Suroviny na jednom papírku, postup na druhém?</span>
+          <span data-i18n="en">Ingredients on one note, method on another?</span>
+          <span class="feature__a">
+            <span data-i18n="cs">V Craftiu je máš spolu.</span>
+            <span data-i18n="en">In Craftio they live together.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Fotka, přesná množství, postup krok za krokem i počet kusů — vše na jedné obrazovce, u každého receptu.</span>
+          <span data-i18n="en">Photo, exact amounts, step-by-step method and portion count — all on one screen, for every recipe.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/recipe-focaccia.jpg" alt="Detail receptu Focaccia v aplikaci Craftio – fotka, suroviny a počet kusů" width="760" height="1196" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 4 — timer (dark) -->
+  <section class="section section--dark feature feature--reverse">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Stopky</span><span data-i18n="en">Timer</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Kynutí, pečení, chlazení — kolikrát za den koukáš na hodinky?</span>
+          <span data-i18n="en">Proofing, baking, chilling — how many times a day do you check the clock?</span>
+          <span class="feature__a">
+            <span data-i18n="cs">Radši si pusť stopky v appce.</span>
+            <span data-i18n="en">Just start a timer in the app.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Pro každý krok receptu si spustíš vlastní pojmenované stopky — třeba "Autolýza" nebo "Druhé kynutí". Appka tě upozorní, až čas vyprší.</span>
+          <span data-i18n="en">Start your own named timer for every step of the recipe — like "Autolysis" or "Second proof". The app lets you know when time's up.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/timer.jpg" alt="Vytvoření pojmenovaných stopek v aplikaci Craftio" width="760" height="1560" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 5 — share as card (cream) -->
+  <section class="section section--cream feature">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Sdílení</span><span data-i18n="en">Sharing</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Chceš recept poslat dál?</span>
+          <span data-i18n="en">Want to send a recipe to someone?</span>
+          <span class="feature__a">
+            <span data-i18n="cs">Udělá z něj hotovou kartu.</span>
+            <span data-i18n="en">It turns into a ready-made card.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Z receptu vznikne přehledná karta s fotkou, surovinami i postupem — během chvilky ji pošleš přes WhatsApp nebo e-mailem.</span>
+          <span data-i18n="en">Every recipe becomes a clean card with a photo, ingredients and method — send it over WhatsApp or email in seconds.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <figure class="share-card phone--float">
+          <img src="assets/share-card.jpg" alt="Sdílecí karta receptu Focaccia vygenerovaná v aplikaci Craftio" width="900" height="855" loading="lazy">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 6 — marketplace (dark) -->
+  <section class="section section--dark feature feature--reverse">
+    <div class="wrap">
+      <div class="feature__text">
+        <span class="kicker reveal">
+          <span data-i18n="cs">Tržiště receptů</span><span data-i18n="en">Recipe marketplace</span>
+        </span>
+        <p class="feature__q reveal">
+          <span data-i18n="cs">Chceš recept ukázat světu, nebo najít inspiraci od ostatních?</span>
+          <span data-i18n="en">Want to show off your recipe, or get inspired by others?</span>
+          <span class="feature__a">
+            <span data-i18n="cs">Tržiště je pro obojí.</span>
+            <span data-i18n="en">The marketplace does both.</span>
+          </span>
+        </p>
+        <p class="feature__desc reveal d1">
+          <span data-i18n="cs">Nahraj vlastní recepty na tržiště, nebo procházej a ukládej recepty od ostatních — s hodnocením a vyhledáváním rovnou v appce.</span>
+          <span data-i18n="en">Publish your own recipes to the marketplace, or browse and save recipes from other users — with ratings and search built right in.</span>
+        </p>
+      </div>
+      <div class="feature__media reveal d1">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__bar"><span class="phone__notch"></span></div>
+            <img src="assets/marketplace.jpg" alt="Tržiště receptů v aplikaci Craftio – procházení a ukládání receptů od ostatních uživatelů" width="760" height="1488" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORE CAPABILITIES (cream) -->
+  <section class="section section--cream more">
+    <div class="wrap">
+      <p class="more__label reveal">
+        <span data-i18n="cs">A appka umí i…</span><span data-i18n="en">The app also does…</span>
+      </p>
+      <div class="chips reveal d1">
+        <span class="chip"><i class="ti ti-receipt" aria-hidden="true"></i><span data-i18n="cs">Kalkulace nákladů</span><span data-i18n="en">Cost calculation</span></span>
+        <span class="chip"><i class="ti ti-list-check" aria-hidden="true"></i><span data-i18n="cs">Mise en Place</span><span data-i18n="en">Mise en place</span></span>
+        <span class="chip"><i class="ti ti-cloud" aria-hidden="true"></i><span data-i18n="cs">Zálohování v cloudu</span><span data-i18n="en">Cloud backup</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE (dark) -->
+  <section class="section section--dark audience">
+    <div class="wrap">
+      <span class="kicker reveal">
+        <span data-i18n="cs">Pro koho je Craftio</span><span data-i18n="en">Who Craftio is for</span>
+      </span>
+      <h2 class="reveal">
+        <span data-i18n="cs">Od domácí kuchyně po malou výrobu.</span>
+        <span data-i18n="en">From the home kitchen to small-batch production.</span>
+      </h2>
+      <div class="tags reveal d1">
+        <span class="tag"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i><span data-i18n="cs">Domácí foodies</span><span data-i18n="en">Home foodies</span></span>
+        <span class="tag"><i class="ti ti-bread" aria-hidden="true"></i><span data-i18n="cs">Domácí pekaři</span><span data-i18n="en">Home bakers</span></span>
+        <span class="tag"><i class="ti ti-building-store" aria-hidden="true"></i><span data-i18n="cs">Malé pekárny</span><span data-i18n="en">Small bakeries</span></span>
+        <span class="tag"><i class="ti ti-cake" aria-hidden="true"></i><span data-i18n="cs">Cukrárny</span><span data-i18n="en">Patisseries</span></span>
+        <span class="tag"><i class="ti ti-chef-hat" aria-hidden="true"></i><span data-i18n="cs">Restaurace</span><span data-i18n="en">Restaurants</span></span>
+        <span class="tag"><i class="ti ti-truck-delivery" aria-hidden="true"></i><span data-i18n="cs">Catering</span><span data-i18n="en">Catering</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA (dark) -->
+  <section class="section section--dark final">
+    <div class="wrap">
+      <p class="final__q reveal">
+        <span data-i18n="cs">Ještě si recepty přepisuješ do sešitu?</span>
+        <span data-i18n="en">Still copying recipes into a notebook?</span>
+        <span class="final__a">
+          <span data-i18n="cs">Nemusíš.</span><span data-i18n="en">You don't have to.</span>
+        </span>
+      </p>
+      <div class="cta-group reveal d1">
+        <a href="https://apps.apple.com/cz/app/craftio/id6764860051" class="btn btn-primary" rel="noopener">
+          <i class="ti ti-brand-apple" aria-hidden="true"></i>
+          <span data-i18n="cs">Stáhnout na App Store</span>
+          <span data-i18n="en">Download on the App Store</span>
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=cz.craftio.app" class="btn btn-outline" rel="noopener">
+          <i class="ti ti-brand-google-play" aria-hidden="true"></i>
+          <span data-i18n="cs">Stáhnout na Google Play</span>
+          <span data-i18n="en">Get it on Google Play</span>
+        </a>
+      </div>
+      <p class="microcopy reveal d1">
+        <span data-i18n="cs">Zdarma na iOS i Androidu · 🇨🇿 🇸🇰</span>
+        <span data-i18n="en">Free on iOS &amp; Android · 🇨🇿 🇸🇰</span>
+      </p>
+    </div>
+  </section>
 </main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__links">
+      <a href="https://craftioapp-official.github.io/craftio-privacy/" rel="noopener">
+        <i class="ti ti-shield-check" aria-hidden="true"></i>
+        <span data-i18n="cs">Zásady ochrany údajů</span>
+        <span data-i18n="en">Privacy policy</span>
+      </a>
+      <a href="mailto:info@getcraftio.com">
+        <i class="ti ti-mail-filled" aria-hidden="true"></i>
+        <span>info@getcraftio.com</span>
+      </a>
+    </div>
+    <div class="footer__copy">© 2026 Craftio</div>
+  </div>
+</footer>
+
 <script>
-(function() {
+(function () {
   var root = document.documentElement;
+  root.classList.remove('no-js');
+  root.classList.add('js');
+
+  /* ---------- Language ---------- */
   var buttons = document.querySelectorAll('[data-set-lang]');
   var titles = {
     cs: 'Craftio — AI plánovač a správce receptů',
     en: 'Craftio — AI recipe manager for food lovers'
   };
   var descriptions = {
-    cs: 'AI plánovač a správce receptů. Načti, naplánuj, uvař, sdílej. Stáhni si Craftio zdarma na App Store i Google Play.',
-    en: 'AI recipe manager for food lovers. Scan, plan, cook, share. Download Craftio free on the App Store and Google Play.'
+    cs: 'Recepty, porce, náklady i sdílení na jednom místě. Stáhni si Craftio zdarma na App Store i Google Play. 🇨🇿 🇸🇰',
+    en: 'Recipes, portions, costs and sharing in one place. Download Craftio free on the App Store and Google Play.'
   };
   function setLang(lang) {
     if (lang !== 'cs' && lang !== 'en') lang = 'cs';
@@ -318,14 +756,13 @@ body::before {
     document.title = titles[lang];
     var metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', descriptions[lang]);
-    buttons.forEach(function(b) {
+    buttons.forEach(function (b) {
       var isActive = b.getAttribute('data-set-lang') === lang;
       b.classList.toggle('active', isActive);
       b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
     try { localStorage.setItem('craftio_lang', lang); } catch (e) {}
   }
-  // determine initial language: saved > browser > default cs
   var initial = 'cs';
   try {
     var saved = localStorage.getItem('craftio_lang');
@@ -340,11 +777,23 @@ body::before {
     initial = (nav2.indexOf('cs') === 0 || nav2.indexOf('sk') === 0) ? 'cs' : 'en';
   }
   setLang(initial);
-  buttons.forEach(function(b) {
-    b.addEventListener('click', function() {
-      setLang(b.getAttribute('data-set-lang'));
-    });
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.getAttribute('data-set-lang')); });
   });
+
+  /* ---------- Reveal on scroll ---------- */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var items = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    items.forEach(function (el) { io.observe(el); });
+  }
 })();
 </script>
 </body>
