@@ -724,6 +724,19 @@ img { max-width: 100%; height: auto; display: block; }
         <span data-i18n="cs">Zásady ochrany údajů</span>
         <span data-i18n="en">Privacy policy</span>
       </a>
+      <!-- Podmínky použití — dva odkazy místo dvou <span>, protože se liší
+           i href: kotva v URL zároveň přepne jazyk cílového dokumentu.
+           #cs / #en míří na začátek dokumentu (obecný odkaz); kontextové
+           odkazy v appce míří na #trziste / #marketplace.
+           [data-i18n] je čisté CSS pravidlo, funguje na libovolném elementu. -->
+      <a href="https://craftioapp-official.github.io/craftio-terms/#cs" rel="noopener" data-i18n="cs">
+        <i class="ti ti-file-text" aria-hidden="true"></i>
+        <span>Podmínky použití</span>
+      </a>
+      <a href="https://craftioapp-official.github.io/craftio-terms/#en" rel="noopener" data-i18n="en">
+        <i class="ti ti-file-text" aria-hidden="true"></i>
+        <span>Terms of Use</span>
+      </a>
       <a href="mailto:info@getcraftio.com">
         <i class="ti ti-mail-filled" aria-hidden="true"></i>
         <span>info@getcraftio.com</span>
