@@ -196,6 +196,23 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .section--cream .microcopy { color: var(--on-cream-muted); }
 
+/* Malý odkaz na /recepty pod microcopy v hero */
+.gntb-link { margin-top: 10px; font-size: 13px; font-weight: 500; }
+.gntb-link a {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 2px;
+  color: var(--coral); text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.gntb-link a span {
+  text-decoration: underline;
+  text-decoration-color: rgba(231, 90, 90, 0.4); text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s var(--ease);
+}
+.gntb-link a:hover { color: var(--coral-hover); }
+.gntb-link a:hover span { text-decoration-color: currentColor; }
+.gntb-link i { font-size: 15px; line-height: 1; }
+
 /* ---------- Phone mockup (signature element) ---------- */
 .phone {
   position: relative;
@@ -454,6 +471,13 @@ img { max-width: 100%; height: auto; display: block; }
         <p class="microcopy reveal d2">
           <span data-i18n="cs">Zdarma · iOS i Android · 🇨🇿 🇸🇰</span>
           <span data-i18n="en">Free · iOS &amp; Android · 🇨🇿 🇸🇰</span>
+        </p>
+        <p class="gntb-link reveal d2">
+          <a href="/recepty/">
+            <span data-i18n="cs">Hledáš recepty od GNTB?</span>
+            <span data-i18n="en">Looking for GNTB's recipes?</span>
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
         </p>
       </div>
       <div class="hero__media reveal d1">
