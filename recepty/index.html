@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#180D0C">
 <title>Recepty od GNTB na Tržišti — Craftio</title>
-<meta name="description" content="Na Tržišti v Craftiu najdeš recepty, které sdílejí uživatelé Craftia. Vyhledej „GNTB“ a najdeš moje recepty. Zdarma na App Store i Google Play.">
+<meta name="description" content="Na Tržišti v Craftiu najdeš recepty, které sdílejí uživatelé Craftia. Vyhledej „George“ a najdeš recepty od GNTB. Zdarma na App Store i Google Play.">
 <link rel="canonical" href="https://getcraftio.com/recepty/">
 <!-- Open Graph -->
 <meta property="og:title" content="Inspirace na pečení od komunity — Craftio">
@@ -211,7 +211,9 @@ img { max-width: 100%; height: auto; display: block; }
   background: rgba(17, 10, 7, 0.03);
   text-align: left;
   font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.35;
+  overflow-wrap: break-word; /* "George.NOT.The.Baker" na 320 px vychází těsně */
 }
+.step > span:last-child { min-width: 0; }
 .step__num {
   flex: 0 0 auto;
   display: inline-flex; align-items: center; justify-content: center;
@@ -345,8 +347,8 @@ img { max-width: 100%; height: auto; display: block; }
         <span data-i18n="cs">Jak na to</span><span data-i18n="en">How it works</span>
       </span>
       <h2 class="reveal">
-        <span data-i18n="cs">Tři kroky k mým receptům</span>
-        <span data-i18n="en">Three steps to my recipes</span>
+        <span data-i18n="cs">Tři kroky k receptům od GNTB</span>
+        <span data-i18n="en">Three steps to recipes by GNTB</span>
       </h2>
       <ol class="steps reveal d1">
         <li class="step">
@@ -359,12 +361,12 @@ img { max-width: 100%; height: auto; display: block; }
         </li>
         <li class="step">
           <span class="step__num" aria-hidden="true">3</span>
-          <span><span data-i18n="cs">Vyhledej <strong>„GNTB“</strong> a najdeš moje recepty</span><span data-i18n="en">Search <strong>“GNTB”</strong> to find my recipes</span></span>
+          <span><span data-i18n="cs">Vyhledej <strong>„George“</strong> a najdeš recepty od GNTB (George.NOT.The.Baker)</span><span data-i18n="en">Search <strong>“George”</strong> to find recipes by GNTB (George.NOT.The.Baker)</span></span>
         </li>
       </ol>
       <p class="author reveal d2">
-        <span data-i18n="cs">Nové recepty přidávám pravidelně. GNTB je můj pekařský účet, Craftio jsem vytvořil já.</span>
-        <span data-i18n="en">I add new recipes regularly. GNTB is my baking account, and I built Craftio.</span>
+        <span data-i18n="cs">Nové recepty přibývají pravidelně.</span>
+        <span data-i18n="en">New recipes are added regularly.</span>
       </p>
     </div>
   </section>
@@ -411,8 +413,8 @@ img { max-width: 100%; height: auto; display: block; }
     en: 'Recipes by GNTB on the Marketplace — Craftio'
   };
   var descriptions = {
-    cs: 'Na Tržišti v Craftiu najdeš recepty, které sdílejí uživatelé Craftia. Vyhledej „GNTB“ a najdeš moje recepty. Zdarma na App Store i Google Play.',
-    en: 'The Marketplace in Craftio is full of recipes shared by Craftio users. Search “GNTB” to find my recipes. Free on the App Store and Google Play.'
+    cs: 'Na Tržišti v Craftiu najdeš recepty, které sdílejí uživatelé Craftia. Vyhledej „George“ a najdeš recepty od GNTB. Zdarma na App Store i Google Play.',
+    en: 'The Marketplace in Craftio is full of recipes shared by Craftio users. Search “George” to find recipes by GNTB. Free on the App Store and Google Play.'
   };
   function setLang(lang, save) {
     if (lang !== 'cs' && lang !== 'en') lang = 'cs';
